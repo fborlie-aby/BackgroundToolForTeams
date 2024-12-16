@@ -8,31 +8,46 @@
         body {
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f0f0f0;
+            overflow: hidden;
+            position: relative;
+            font-family: Arial, sans-serif;
         }
 
         canvas {
             display: block;
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
 
         .input-container {
-            margin-bottom: 20px;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        input, select {
-            margin: 0 10px;
+        input, select, button {
+            margin: 0;
             padding: 5px;
             font-size: 16px;
         }
 
         button {
-            padding: 5px 10px;
-            font-size: 16px;
+            cursor: pointer;
         }
 
         .switch {
@@ -91,111 +106,118 @@
         <input id="titleInput" type="text" placeholder="Enter Title" value="Title">
 
         <select id="backgroundSelector" onchange="updateBackground()">
-        // Manually add your images from Backgrounds folder
-				<option value="Backgrounds/benjamin-child-GWe0dlVD9e0-unsplash.jpg">Background 1</option>
-				<option value="Backgrounds/home-indoor-design-concept.jpg">Background 2</option>
-				<option value="Backgrounds/kelly-sikkema--1_RZL8BGBM-unsplash.jpg">Background 3</option>
+            <option value="Backgrounds/Aurobay Teams_Black logo on light grey.jpg">Logo Light Grey</option>
+            <option value="Backgrounds/Aurobay Teams_Blue pattern.jpg">Blue Pattern</option>
+            <option value="Backgrounds/Aurobay Teams_Chinese New Year.jpg">Chinese New Year</option>
+            <option value="Backgrounds/Aurobay Teams_Christmas 1.jpg">Christmas 1</option>
+            <option value="Backgrounds/Aurobay Teams_Christmas 2.jpg">Christmas 2</option>
+            <option value="Backgrounds/Aurobay Teams_Office black logo.jpg">Office Black logo</option>
+            <option value="Backgrounds/Aurobay Teams_Office with energy screen.jpg">Office Energy</option>
+            <option value="Backgrounds/Aurobay Teams_Plain blue.jpg">Plain Blue</option>
+            <option value="Backgrounds/Aurobay Teams_Pride label.png">Pride Label</option>
+            <option value="Backgrounds/Aurobay Teams_Pride stripe.png">Pride Stripes</option>
+            <option value="Backgrounds/Aurobay Teams_Spring knoppar.jpg">Spring buds</option>
+            <option value="Backgrounds/Aurobay Teams_White logo on grey.jpg">White on grey</option>
+            <option value="Backgrounds/Aurobay Teams_background_summer.png">Summer 2023</option>
+            <option value="Backgrounds/Teams_background_Fall_2023.png">Autumn 2023</option>
+            <option value="Backgrounds/Aurobay Teams_background_December_2023.png">December 2023</option>
+            <option value="Backgrounds/Teams_background_December_2023.png">December 2023.2</option>
+            <option value="Backgrounds/Aurobay Teams_background_Winter_2023.png">Winter 2023</option>
+            <option value="Backgrounds/Teams_background_Q1_2024.png">Spring 2024</option>
+            <option value="Backgrounds/Teams_background_April_2024.png">April 2024</option>
+            <option value="Backgrounds/Teams_background_April_2024_2.png">April 2024.2</option>
+            <option value="Backgrounds/Teams_background_Chinese_New_Year_2024.png">Chinese New year 2024</option>
+            <option value="Backgrounds/Teams_background_June2024_2.png">June 2024.2</option>
+            <option value="Backgrounds/Teams_background_June_2024.png">June 2024</option>
+            <option value="Backgrounds/Teams_background_Oct_2024.png">October 2024</option>
         </select>
         <label class="switch">
             <input type="checkbox" id="colorToggle" onchange="toggleTextColor()">
             <span class="slider"></span>
         </label>
-        <input type="file" id="logoUploader" accept="image/*" onchange="uploadLogo()">
         <button onclick="updateCanvas()">Update Text</button>
         <button onclick="saveImage()">Save image</button>
-        
+        <input id="logoInput" type="file" accept="image/*" onchange="uploadLogo()">
     </div>
     <canvas id="canvas"></canvas>
 
     <script>
-        // Setup canvas and context
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
-        // Set canvas dimensions
         canvas.width = 1920;
         canvas.height = 1080;
 
-        // Load background image
         const backgroundImage = new Image();
-        backgroundImage.src = 'Backgrounds/benjamin-child-GWe0dlVD9e0-unsplash.jpg'; // Default background image
+        backgroundImage.src = 'Backgrounds/Teams_background_June2024_2.png';
+        let textColor = 'white';
+        let logoImage = null;
 
         function drawCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw background image
             ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
 
-            // Get input values
             const name = document.getElementById('nameInput').value;
             const title = document.getElementById('titleInput').value;
 
-            // Set text properties
             ctx.font = '60px Tahoma';
             ctx.fillStyle = textColor;
             ctx.textAlign = 'left';
-
-            // Draw first line of text
             ctx.fillText(name, 341, 188);
 
-            // Draw second line of text
             ctx.font = '40px Tahoma';
             ctx.fillText(title, 341, 243);
 
-            // Draw logo if uploaded
             if (logoImage) {
-                const logoWidth = 300; // Desired width of the logo
-                const logoHeight = 1080; // Desired height of the logo
+                const logoWidth = 150;
+                const logoHeight = 150;
                 ctx.save();
-                ctx.translate(logoWidth / 2, canvas.height / 2); // Center logo before rotation
-                ctx.rotate(-Math.PI / 2); // Rotate 90 degrees counterclockwise
-                ctx.drawImage(logoImage, -logoHeight / 2, -logoWidth / 2, logoHeight, logoWidth);
+                ctx.translate(150, canvas.height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.drawImage(logoImage, -logoHeight / 2, -logoWidth / 2, logoWidth, logoHeight);
                 ctx.restore();
             }
         }
 
         backgroundImage.onload = drawCanvas;
 
-        // Update canvas with new text
         function updateCanvas() {
             drawCanvas();
         }
 
-        // Update background image
         function updateBackground() {
             const selectedBackground = document.getElementById('backgroundSelector').value;
             backgroundImage.src = selectedBackground;
         }
 
-        // Toggle text color
         function toggleTextColor() {
             const colorToggle = document.getElementById('colorToggle');
             textColor = colorToggle.checked ? 'black' : 'white';
             drawCanvas();
         }
 
-        // Upload logo
-        function uploadLogo() {
-            const fileInput = document.getElementById('logoUploader');
-            const file = fileInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    logoImage = new Image();
-                    logoImage.onload = drawCanvas;
-                    logoImage.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Save canvas as image
         function saveImage() {
             const link = document.createElement('a');
             link.download = 'output.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
+
+        function uploadLogo() {
+            const fileInput = document.getElementById('logoInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    logoImage = new Image();
+                    logoImage.src = event.target.result;
+                    logoImage.onload = drawCanvas;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     </script>
 </body>
 </html>
+
