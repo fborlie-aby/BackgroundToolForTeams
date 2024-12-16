@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customized Background image for Teams or any other online video meeting</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            margin: 0 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="input-container">
+
+        <input id="nameInput" type="text" placeholder="Enter Name" value="Name LASTNAME">
+
+        <input id="titleInput" type="text" placeholder="Enter Title" value="Title">
+
+        <select id="backgroundSelector" onchange="updateBackground()">
+        // Manually add your images from Backgrounds folder
+				<option value="Backgrounds/benjamin-child-GWe0dlVD9e0-unsplash.jpg">Background 1</option>
+				<option value="Backgrounds/home-indoor-design-concept.jpg">Background 2</option>
+				<option value="Backgrounds/kelly-sikkema--1_RZL8BGBM-unsplash.jpg">Background 3</option>
+        </select>
+        <button onclick="updateCanvas()">Update Text</button>
+    </div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // Setup canvas and context
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas dimensions
+        canvas.width = 1920;
+        canvas.height = 1080;
+
+        // Load background image
+        const backgroundImage = new Image();
+        backgroundImage.src = 'Backgrounds/benjamin-child-GWe0dlVD9e0-unsplash.jpg'; // Default background image
+
+        function drawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw background image
+            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+            // Get input values
+            const name = document.getElementById('nameInput').value;
+            const title = document.getElementById('titleInput').value;
+
+            // Set text properties
+            ctx.font = '60px Tahoma';
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'left';
+
+            // Draw first line of text
+            ctx.fillText(name, 341, 188);
+
+            // Draw second line of text
+            ctx.font = '40px Tahoma';
+            ctx.fillText(title, 341, 243);
+        }
+
+        backgroundImage.onload = drawCanvas;
+
+        // Update canvas with new text
+        function updateCanvas() {
+            drawCanvas();
+        }
+
+        // Update background image
+        function updateBackground() {
+            const selectedBackground = document.getElementById('backgroundSelector').value;
+            backgroundImage.src = selectedBackground;
+        }
+
+        // Save canvas as image
+        function saveImage() {
+            const link = document.createElement('a');
+            link.download = 'output.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Add button to save the image
+        const button = document.createElement('button');
+        button.textContent = 'Save Image';
+        button.style.position = 'absolute';
+        button.style.top = '20px';
+        button.style.left = '20px';
+        button.onclick = saveImage;
+        document.body.appendChild(button);
+    </script>
+</body>
+</html>
