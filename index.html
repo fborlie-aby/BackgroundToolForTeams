@@ -132,7 +132,7 @@
 
             // Set text properties
             ctx.font = '60px Tahoma';
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = textColor;
             ctx.textAlign = 'left';
 
             // Draw first line of text
@@ -141,6 +141,17 @@
             // Draw second line of text
             ctx.font = '40px Tahoma';
             ctx.fillText(title, 341, 243);
+
+            // Draw logo if uploaded
+            if (logoImage) {
+                const logoWidth = 200; // Desired width of the logo
+                const logoHeight = 200; // Desired height of the logo
+                ctx.save();
+                ctx.translate(logoWidth / 2, canvas.height / 2); // Center logo before rotation
+                ctx.rotate(-Math.PI / 2); // Rotate 90 degrees counterclockwise
+                ctx.drawImage(logoImage, -logoHeight / 2, -logoWidth / 2, logoHeight, logoWidth);
+                ctx.restore();
+            }
         }
 
         backgroundImage.onload = drawCanvas;
@@ -155,6 +166,7 @@
             const selectedBackground = document.getElementById('backgroundSelector').value;
             backgroundImage.src = selectedBackground;
         }
+
         // Toggle text color
         function toggleTextColor() {
             const colorToggle = document.getElementById('colorToggle');
@@ -176,6 +188,7 @@
                 reader.readAsDataURL(file);
             }
         }
+
         // Save canvas as image
         function saveImage() {
             const link = document.createElement('a');
@@ -183,8 +196,6 @@
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
-
-
     </script>
 </body>
-</html>    
+</html>
