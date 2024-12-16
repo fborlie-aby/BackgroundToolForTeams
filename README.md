@@ -14,7 +14,6 @@ This project allows users to create customized Teams background images by overla
 - HTML
 - CSS
 - JavaScript
-- ASPX for backend integration
 
 ## How to Use
 
